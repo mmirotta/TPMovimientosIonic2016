@@ -124,21 +124,60 @@ angular.module('starter.controllers', ['ngCordova'])
       if(result.y > 10){
         $scope.ubicacion.y = 1;
         $scope.imagen = "img/abajo.png"; 
-        $cordovaNativeAudio.play('abajo');        
+        if ($scope.abajo == 0)
+        {
+          $cordovaNativeAudio.play('abajo');  
+          $scope.abajo = 1;
+        }
+        $scope.izquierda = 0;
+        $scope.derecha = 0;
+        $scope.arriba = 0;
+        $scope.bocaArriba = 0;
+        $scope.bocaAbajo = 0;      
       }else if(result.y < -10){
         $scope.ubicacion.y = -1;
         $scope.imagen = "img/arriba.png"; 
-        $cordovaNativeAudio.play('arriba');
+        if ($scope.arriba == 0)
+        {
+          $cordovaNativeAudio.play('arriba');
+          $scope.arriba = 1;
+        }
+        $scope.izquierda = 0;
+        $scope.derecha = 0;
+        $scope.abajo = 0;
+        $scope.bocaArriba = 0;
+        $scope.bocaAbajo = 0;   
+
       }else{
         $scope.ubicacion.y = 0;
       }
 
       if(result.z > 10){
         $scope.ubicacion.z = 1;
-        $cordovaNativeAudio.play('bocaArriba');
+        if ($scope.bocaArriba == 0)
+        {
+          $cordovaNativeAudio.play('bocaArriba');
+          $scope.bocaArriba = 1;
+        }
+        $scope.izquierda = 0;
+        $scope.derecha = 0;
+        $scope.abajo = 0;   
+        $scope.arriva = 0;
+        $scope.bocaArriva = 0;
+
       }else if(result.z < -10){
         $scope.ubicacion.z = -1;
-        $cordovaNativeAudio.play('bocaAbajo');
+        if ($scope.bocaAbajo == 0)
+        {
+          $cordovaNativeAudio.play('bocaAbajo');
+          $scope.bocaAbajo = 1;
+        }
+        $scope.izquierda = 0;
+        $scope.derecha = 0;
+        $scope.abajo = 0;   
+        $scope.arriba = 0;
+        $scope.bocaArriba = 0;
+
       }else{
         $scope.ubicacion.z = 0;
       }
