@@ -1,8 +1,28 @@
 <ion-view view-title="Juego">
   <ion-content style="text-align:center; background-color:#eee">
-    {{ubicacion.x}}
-    {{ubicacion.y}}
-    {{ubicacion.z}}
-    <img src='{{imagen}}' style="width:70%; margin-top:15%">
+    <div style="width:100%">
+    	<p>Grabar audio Arriba - Grabar audio Abajo</p>
+    	<button class="button button-positive icon ion-record" ng-click="GrabarAudio('arriba')"></button>
+	    <button class="button button-positive icon ion-stop" ng-click="DetenerAudio('arriba')" style="margin-right:5%"></button>
+	    <button class="button button-calm icon ion-record" ng-click="GrabarAudio('abajo')"></button>
+	    <button class="button button-calm icon ion-stop" ng-click="DetenerAudio('abajo')"></button>
+	</div>
+	<div style="width:100%">
+	    <p>Grabar audio Izquierda - Grabar audio Derecha</p>
+    	<button class="button button-balanced icon ion-record" ng-click="GrabarAudio('izquierda')"></button>
+	    <button class="button button-balanced icon ion-stop" ng-click="DetenerAudio('izquierda')" style="margin-right:5%"></button>
+	    <button class="button button-assertive icon ion-record" ng-click="GrabarAudio('derecha')"></button>
+	    <button class="button button-assertive icon ion-stop" ng-click="DetenerAudio('derecha')"></button>
+	</div>
+	<div style="width:100%">
+	    <p>Grabar audio Boca Abajo - Grabar audio Boca Ariba</p>
+	    <button class="button button-dark icon ion-record" ng-click="GrabarAudio('bocaAbajo')"></button>
+	    <button class="button button-dark icon ion-stop" ng-click="DetenerAudio('bocaAbajo')" style="margin-right:5%"></button>
+	    <button class="button button-energized icon ion-record" ng-click="GrabarAudio('bocaArriba')"></button>
+	    <button class="button button-energized icon ion-stop" ng-click="DetenerAudio('bocaArriba')"></button>
+	</div>
+	<div>
+		<img src='{{imagen}}' style="width:50%; margin-top:2%">
+	</div>
   </ion-content>
 </ion-view>

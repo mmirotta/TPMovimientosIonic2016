@@ -9,14 +9,10 @@ angular.module('starter.controllers', ['ngCordova'])
   };
 })
 
-.controller('JuegoCtrl', function($scope, $state, $stateParams, $cordovaDeviceMotion, $cordovaMedia, $cordovaNativeAudio) {
+.controller('JuegoCtrl', function($scope, $state, $stateParams, $ionicPlatform, $cordovaDeviceMotion, $cordovaNativeAudio, $cordovaMedia) {
   $scope.usuario = JSON.parse($stateParams.usuario);
-  $scope.izquierda = 0;
-  $scope.derecha = 0;
-  $scope.arriba = 0;
-  $scope.abajo = 0;
-  $scope.bocaArriba = 0;
-  $scope.bocaAbajo = 0;
+  $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+  $scope.existeAudio = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
   $scope.imagen = "img/sinMov.png"; 
   try
   {
@@ -73,126 +69,188 @@ angular.module('starter.controllers', ['ngCordova'])
     console.log(error);
   }
 
+  $ionicPlatform.ready(function() {
+    $scope.opciones = { frequency: 100 };
+    $scope.ubicacion = {
+        x : null,
+        y : null,
+        z : null,
+        timestamp : null
+    }
+    
+    $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.opciones);
 
-  $scope.opciones = { frequency: 100 };
-  $scope.ubicacion = {
-      x : null,
-      y : null,
-      z : null,
-      timestamp : null
-  }
-  
-  $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.opciones);
+    $scope.watch.then(
+      null,
+      function(error) {
+      // An error occurred
+      },
+      function(result) {
+        if(result.x > 10){
+          $scope.ubicacion.x = 1;
+          $scope.imagen = "img/izquierda.png"; 
+          if ($scope.activos["izquierda"] == 0)
+          {
+            if ($scope.existeAudio["izquierda"] == 1)
+              $scope.audioIzquierda.play(); 
+            else
+              $cordovaNativeAudio.play('izquierda');
 
-  $scope.watch.then(
-    null,
-    function(error) {
-    // An error occurred
-    },
-    function(result) {
-      if(result.x > 10){
-        $scope.ubicacion.x = 1;
-        $scope.imagen = "img/izquierda.png"; 
-        if ($scope.izquierda == 0)
-        {
-          $cordovaNativeAudio.play('izquierda');
-          $scope.izquierda = 1;
+            $scope.activos = {izquierda: 1, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+          }
+        }else if(result.x < -10){
+          $scope.ubicacion.x = -1;
+          $scope.imagen = "img/derecha.png"; 
+          if ($scope.activos["derecha"] == 0)
+          {
+            if ($scope.existeAudio["derecha"] == 1)
+              $scope.audioDerecha.play(); 
+            else
+              $cordovaNativeAudio.play('derecha');
+            $scope.activos = {izquierda: 0, derecha: 1, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+          }
+        }else{
+          $scope.ubicacion.x = 0;
         }
-        $scope.derecha = 0;
-        $scope.arriba = 0;
-        $scope.abajo = 0;
-        $scope.bocaArriba = 0;
-        $scope.bocaAbajo = 0;
 
-      }else if(result.x < -10){
-        $scope.ubicacion.x = -1;
-        $scope.imagen = "img/derecha.png"; 
-        if ($scope.derecha == 0)
-        {
-          $cordovaNativeAudio.play('derecha');
-          $scope.derecha = 1;
+        if(result.y > 10){
+          $scope.ubicacion.y = 1;
+          $scope.imagen = "img/abajo.png"; 
+          if ($scope.activos["abajo"] == 0)
+          {
+            if ($scope.existeAudio["abajo"] == 1)
+              $scope.audioAbajo.play(); 
+            else
+              $cordovaNativeAudio.play('abajo');
+
+            $scope.activos = {izquierda: 0, derecha: 0, abajo: 1, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+          }   
+        }else if(result.y < -10){
+          $scope.ubicacion.y = -1;
+          $scope.imagen = "img/arriba.png"; 
+          if ($scope.activos["arriba"] == 0)
+          {
+            if ($scope.existeAudio["arriba"] == 1)
+              $scope.audioArriba.play(); 
+            else
+              $cordovaNativeAudio.play('arriba');
+            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 1, bocaArriba: 0, bocaAbajo:0};
+          }
+        }else{
+          $scope.ubicacion.y = 0;
         }
-        $scope.izquierda = 0;
-        $scope.arriba = 0;
-        $scope.abajo = 0;
-        $scope.bocaArriba = 0;
-        $scope.bocaAbajo = 0;
-      }else{
-        $scope.ubicacion.x = 0;
-      }
 
-      if(result.y > 10){
-        $scope.ubicacion.y = 1;
-        $scope.imagen = "img/abajo.png"; 
-        if ($scope.abajo == 0)
-        {
-          $cordovaNativeAudio.play('abajo');  
-          $scope.abajo = 1;
+        if(result.z > 10){
+          $scope.ubicacion.z = 1;
+          if ($scope.activos["bocaArriba"] == 0)
+          {
+            if ($scope.existeAudio["bocaArriba"] == 1)
+              $scope.audioBocaArriba.play(); 
+            else
+              $cordovaNativeAudio.play('bocaArriba');
+            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 1, bocaAbajo:0};
+          }
+        }else if(result.z < -10){
+          $scope.ubicacion.z = -1;
+          if ($scope.activos["bocaAbajo"] == 0)
+          {
+            if ($scope.existeAudio["bocaAbajo"] == 1)
+              $scope.audioBocaAbajo.play(); 
+            else
+              $cordovaNativeAudio.play('bocaAbajo');
+            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:1};
+          }
+        }else{
+          $scope.ubicacion.z = 0;
         }
-        $scope.izquierda = 0;
-        $scope.derecha = 0;
-        $scope.arriba = 0;
-        $scope.bocaArriba = 0;
-        $scope.bocaAbajo = 0;      
-      }else if(result.y < -10){
-        $scope.ubicacion.y = -1;
-        $scope.imagen = "img/arriba.png"; 
-        if ($scope.arriba == 0)
+
+        if ($scope.ubicacion.x == 0 && $scope.ubicacion.y == 0 && $scope.ubicacion.z == 1)
         {
-          $cordovaNativeAudio.play('arriba');
-          $scope.arriba = 1;
+          $scope.imagen = "img/sinMov.png"; 
         }
-        $scope.izquierda = 0;
-        $scope.derecha = 0;
-        $scope.abajo = 0;
-        $scope.bocaArriba = 0;
-        $scope.bocaAbajo = 0;   
 
-      }else{
-        $scope.ubicacion.y = 0;
-      }
-
-      if(result.z > 10){
-        $scope.ubicacion.z = 1;
-        if ($scope.bocaArriba == 0)
-        {
-          $cordovaNativeAudio.play('bocaArriba');
-          $scope.bocaArriba = 1;
-        }
-        $scope.izquierda = 0;
-        $scope.derecha = 0;
-        $scope.abajo = 0;   
-        $scope.arriva = 0;
-        $scope.bocaArriva = 0;
-
-      }else if(result.z < -10){
-        $scope.ubicacion.z = -1;
-        if ($scope.bocaAbajo == 0)
-        {
-          $cordovaNativeAudio.play('bocaAbajo');
-          $scope.bocaAbajo = 1;
-        }
-        $scope.izquierda = 0;
-        $scope.derecha = 0;
-        $scope.abajo = 0;   
-        $scope.arriba = 0;
-        $scope.bocaArriba = 0;
-
-      }else{
-        $scope.ubicacion.z = 0;
-      }
-
-      if ($scope.ubicacion.x == 0 && $scope.ubicacion.y == 0 && $scope.ubicacion.z == 1)
-      {
-        $scope.imagen = "img/sinMov.png"; 
-      }
-
-      var timeStamp = result.timestamp;
+        var timeStamp = result.timestamp;
+    });
   });
+  $scope.GrabarAudio = function(opcion){
 
+    $ionicPlatform.ready(function() {
+      try{
+        switch (opcion)
+        {
+          case "izquierda":
+              $scope.audioIzquierda = $cordovaMedia.newMedia("izquierda.mp3");
+              $scope.audioIzquierda.startRecord();
+              break;  
+          case "derecha":
+              $scope.audioDerecha = $cordovaMedia.newMedia("derecha.mp3");
+              $scope.audioDerecha.startRecord();
+              break;  
+          case "abajo":
+              $scope.audioAbajo = $cordovaMedia.newMedia("abajo.mp3");
+              $scope.audioAbajo.startRecord();
+              break;  
+          case "arriba":
+              $scope.audioArriba = $cordovaMedia.newMedia("arriba.mp3");
+              $scope.audioArriba.startRecord();
+              break;  
+          case "bocaArriba":
+              $scope.audioBocaArriba = $cordovaMedia.newMedia("bocaArriba.mp3");
+              $scope.audioBocaArriba.startRecord();
+              break;  
+          case "bocaAbajo":
+              $scope.audioBocaAbajo = $cordovaMedia.newMedia("bocaAbajo.mp3");
+              $scope.audioBocaAbajo.startRecord();
+              break;  
+        }
+      } 
+      catch(error){
+        alert(error);
+      }
+    });
+  }
 
+  $scope.DetenerAudio = function(opcion){
+    $ionicPlatform.ready(function() {
+      try{
+        switch (opcion)
+        {
+          case "izquierda":
+              $scope.audioIzquierda.stopRecord();
+              $scope.existeAudio["izquierda"] = 1;
+              break;
+          case "derecha":
+              $scope.audioDerecha.stopRecord();
+              $scope.existeAudio["derecha"] = 1;
+              break;
+          case "arriba":
+              $scope.audioArriba.stopRecord();
+              $scope.existeAudio["arriba"] = 1;
+              break;
+          case "abajo":
+              $scope.audioAbajo.stopRecord();
+              $scope.existeAudio["abajo"] = 1;
+              break;
+          case "bocaArriba":
+              $scope.audioBocaArriba.stopRecord();
+              $scope.existeAudio["bocaArriba"] = 1;
+              break;
+          case "bocaAbajo":
+              $scope.audioBocaAbajo.stopRecord();
+              $scope.existeAudio["bocaAbajo"] = 1;
+              break;
+        }
+      } 
+      catch(error){
+        alert(error);
+      }
+    });
+  }
 })
-.controller('GrabarCtrl', function($scope) {
+
+.controller('GrabarCtrl', function($scope, $ionicPlatform, $cordovaMedia) {
+
+
 })
 
 .controller('PerfilCtrl', function($scope) {
