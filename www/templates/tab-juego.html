@@ -1,11 +1,11 @@
 <ion-view view-title="Juego">
-  <ion-content style="text-align:center; background-color:#eee">
+  <ion-content class="bodyJuego" style="text-align:center">
     <div style="width:100%">
-    	<p>Grabar audio Arriba - Grabar audio Abajo</p>
-    	<button class="button button-positive icon ion-record" ng-click="GrabarAudio('arriba')"></button>
-	    <button class="button button-positive icon ion-stop" ng-click="DetenerAudio('arriba')" style="margin-right:5%"></button>
-	    <button class="button button-calm icon ion-record" ng-click="GrabarAudio('abajo')"></button>
-	    <button class="button button-calm icon ion-stop" ng-click="DetenerAudio('abajo')"></button>
+    	<p>Grabar audio Parado - Grabar audio Acostado</p>
+    	<button class="button button-positive icon ion-record" ng-click="GrabarAudio('parado')"></button>
+	    <button class="button button-positive icon ion-stop" ng-click="DetenerAudio('parado')" style="margin-right:5%"></button>
+	    <button class="button button-calm icon ion-record" ng-click="GrabarAudio('acostado')"></button>
+	    <button class="button button-calm icon ion-stop" ng-click="DetenerAudio('acostado')"></button>
 	</div>
 	<div style="width:100%">
 	    <p>Grabar audio Izquierda - Grabar audio Derecha</p>
@@ -15,14 +15,12 @@
 	    <button class="button button-assertive icon ion-stop" ng-click="DetenerAudio('derecha')"></button>
 	</div>
 	<div style="width:100%">
-	    <p>Grabar audio Boca Abajo - Grabar audio Boca Ariba</p>
+	    <p>Grabar audio Boca Abajo</p>
 	    <button class="button button-dark icon ion-record" ng-click="GrabarAudio('bocaAbajo')"></button>
 	    <button class="button button-dark icon ion-stop" ng-click="DetenerAudio('bocaAbajo')" style="margin-right:5%"></button>
-	    <button class="button button-energized icon ion-record" ng-click="GrabarAudio('bocaArriba')"></button>
-	    <button class="button button-energized icon ion-stop" ng-click="DetenerAudio('bocaArriba')"></button>
 	</div>
 	<div>
-		<img src='{{imagen}}' style="width:50%; margin-top:2%">
+		<img src='{{imagen}}' style="width:50%; margin-top:2%; border-radius:7px">
 	</div>
   </ion-content>
 </ion-view>

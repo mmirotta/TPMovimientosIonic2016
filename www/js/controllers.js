@@ -11,21 +11,13 @@ angular.module('starter.controllers', ['ngCordova'])
 
 .controller('JuegoCtrl', function($scope, $state, $stateParams, $ionicPlatform, $cordovaDeviceMotion, $cordovaNativeAudio, $cordovaMedia) {
   $scope.usuario = JSON.parse($stateParams.usuario);
-  $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
-  $scope.existeAudio = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+  $scope.activos = {izquierda: 0, derecha: 0, parado: 0, acostado: 0, bocaAbajo:0};
+  $scope.existeAudio = {izquierda: 0, derecha: 0, parado: 0, acostado: 0, bocaAbajo:0};
   $scope.imagen = "img/sinMov.png"; 
   try
   {
     $cordovaNativeAudio
-    .preloadSimple('arriba', 'audios/arriba.mp3')
-    .then(function (msg) {
-      console.log(msg);
-    }, function (error) {
-      alert(error);
-    });
-
-    $cordovaNativeAudio
-    .preloadSimple('abajo', 'audios/abajo.mp3')
+    .preloadSimple('parado', 'audios/parado.mp3')
     .then(function (msg) {
       console.log(msg);
     }, function (error) {
@@ -49,7 +41,7 @@ angular.module('starter.controllers', ['ngCordova'])
     });
 
     $cordovaNativeAudio
-    .preloadSimple('bocaArriba', 'audios/bocaArriba.mp3')
+    .preloadSimple('acostado', 'audios/acostado.mp3')
     .then(function (msg) {
       console.log(msg);
     }, function (error) {
@@ -96,7 +88,7 @@ angular.module('starter.controllers', ['ngCordova'])
             else
               $cordovaNativeAudio.play('izquierda');
 
-            $scope.activos = {izquierda: 1, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+            $scope.activos = {izquierda: 1, derecha: 0, parado: 0, acostado: 0, bocaAbajo:0};
           }
         }else if(result.x < -10){
           $scope.ubicacion.x = -1;
@@ -107,7 +99,7 @@ angular.module('starter.controllers', ['ngCordova'])
               $scope.audioDerecha.play(); 
             else
               $cordovaNativeAudio.play('derecha');
-            $scope.activos = {izquierda: 0, derecha: 1, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+            $scope.activos = {izquierda: 0, derecha: 1, parado: 0, acostado: 0, bocaAbajo:0};
           }
         }else{
           $scope.ubicacion.x = 0;
@@ -115,26 +107,26 @@ angular.module('starter.controllers', ['ngCordova'])
 
         if(result.y > 10){
           $scope.ubicacion.y = 1;
-          $scope.imagen = "img/abajo.png"; 
-          if ($scope.activos["abajo"] == 0)
+          $scope.imagen = "img/parado.png"; 
+          if ($scope.activos["parado"] == 0)
           {
-            if ($scope.existeAudio["abajo"] == 1)
-              $scope.audioAbajo.play(); 
+            if ($scope.existeAudio["parado"] == 1)
+              $scope.audioParado.play(); 
             else
-              $cordovaNativeAudio.play('abajo');
+              $cordovaNativeAudio.play('parado');
 
-            $scope.activos = {izquierda: 0, derecha: 0, abajo: 1, arriba: 0, bocaArriba: 0, bocaAbajo:0};
+            $scope.activos = {izquierda: 0, derecha: 0, parado: 1, acostado: 0, bocaAbajo:0};
           }   
         }else if(result.y < -10){
           $scope.ubicacion.y = -1;
-          $scope.imagen = "img/arriba.png"; 
-          if ($scope.activos["arriba"] == 0)
+          $scope.imagen = "img/parado.png"; 
+          if ($scope.activos["parado"] == 0)
           {
-            if ($scope.existeAudio["arriba"] == 1)
-              $scope.audioArriba.play(); 
+            if ($scope.existeAudio["parado"] == 1)
+              $scope.audioParado.play(); 
             else
-              $cordovaNativeAudio.play('arriba');
-            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 1, bocaArriba: 0, bocaAbajo:0};
+              $cordovaNativeAudio.play('parado');
+            $scope.activos = {izquierda: 0, derecha: 0, parado: 1, acostado: 0, bocaAbajo:0};
           }
         }else{
           $scope.ubicacion.y = 0;
@@ -142,13 +134,13 @@ angular.module('starter.controllers', ['ngCordova'])
 
         if(result.z > 10){
           $scope.ubicacion.z = 1;
-          if ($scope.activos["bocaArriba"] == 0)
+          if ($scope.activos["acostado"] == 0)
           {
-            if ($scope.existeAudio["bocaArriba"] == 1)
-              $scope.audioBocaArriba.play(); 
+            if ($scope.existeAudio["acostado"] == 1)
+              $scope.audioAcostado.play(); 
             else
-              $cordovaNativeAudio.play('bocaArriba');
-            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 1, bocaAbajo:0};
+              $cordovaNativeAudio.play('acostado');
+            $scope.activos = {izquierda: 0, derecha: 0, parado: 0, acostado: 1, bocaAbajo:0};
           }
         }else if(result.z < -10){
           $scope.ubicacion.z = -1;
@@ -158,7 +150,7 @@ angular.module('starter.controllers', ['ngCordova'])
               $scope.audioBocaAbajo.play(); 
             else
               $cordovaNativeAudio.play('bocaAbajo');
-            $scope.activos = {izquierda: 0, derecha: 0, abajo: 0, arriba: 0, bocaArriba: 0, bocaAbajo:1};
+            $scope.activos = {izquierda: 0, derecha: 0, parado: 0, acostado: 0, bocaAbajo:1};
           }
         }else{
           $scope.ubicacion.z = 0;
@@ -186,17 +178,13 @@ angular.module('starter.controllers', ['ngCordova'])
               $scope.audioDerecha = $cordovaMedia.newMedia("derecha.mp3");
               $scope.audioDerecha.startRecord();
               break;  
-          case "abajo":
-              $scope.audioAbajo = $cordovaMedia.newMedia("abajo.mp3");
-              $scope.audioAbajo.startRecord();
+          case "parado":
+              $scope.audioParado = $cordovaMedia.newMedia("parado.mp3");
+              $scope.audioParado.startRecord();
               break;  
-          case "arriba":
-              $scope.audioArriba = $cordovaMedia.newMedia("arriba.mp3");
-              $scope.audioArriba.startRecord();
-              break;  
-          case "bocaArriba":
-              $scope.audioBocaArriba = $cordovaMedia.newMedia("bocaArriba.mp3");
-              $scope.audioBocaArriba.startRecord();
+          case "acostado":
+              $scope.audioAcostado = $cordovaMedia.newMedia("acostado.mp3");
+              $scope.audioAcostado.startRecord();
               break;  
           case "bocaAbajo":
               $scope.audioBocaAbajo = $cordovaMedia.newMedia("bocaAbajo.mp3");
@@ -223,17 +211,17 @@ angular.module('starter.controllers', ['ngCordova'])
               $scope.audioDerecha.stopRecord();
               $scope.existeAudio["derecha"] = 1;
               break;
-          case "arriba":
-              $scope.audioArriba.stopRecord();
-              $scope.existeAudio["arriba"] = 1;
+          case "parado":
+              $scope.audioParado.stopRecord();
+              $scope.existeAudio["parado"] = 1;
               break;
           case "abajo":
               $scope.audioAbajo.stopRecord();
               $scope.existeAudio["abajo"] = 1;
               break;
-          case "bocaArriba":
-              $scope.audioBocaArriba.stopRecord();
-              $scope.existeAudio["bocaArriba"] = 1;
+          case "acostado":
+              $scope.audioAcostado.stopRecord();
+              $scope.existeAudio["acostado"] = 1;
               break;
           case "bocaAbajo":
               $scope.audioBocaAbajo.stopRecord();
@@ -246,11 +234,6 @@ angular.module('starter.controllers', ['ngCordova'])
       }
     });
   }
-})
-
-.controller('GrabarCtrl', function($scope, $ionicPlatform, $cordovaMedia) {
-
-
 })
 
 .controller('PerfilCtrl', function($scope) {
